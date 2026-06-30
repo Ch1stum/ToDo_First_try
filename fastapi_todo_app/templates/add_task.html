@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Добавить задачу — Менеджер задач</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #0a0a0f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        color: #e0e0e0;
+        padding: 20px;
+    }
+
+    .add-task-form {
+        background: #1a1a2e;
+        padding: 40px 45px;
+        border-radius: 20px;
+        border: 1px solid #6c3cb0;
+        box-shadow: 0 8px 30px rgba(108, 60, 176, 0.2);
+        width: 100%;
+        max-width: 450px;
+    }
+
+    .add-task-form h2 {
+        text-align: center;
+        color: #c084fc;
+        margin-bottom: 25px;
+        font-weight: 700;
+        font-size: 1.8rem;
+    }
+
+    .add-task-form label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #a0a0b0;
+        margin-top: 12px;
+        margin-bottom: 4px;
+        text-align: left;
+    }
+
+    .add-task-form input,
+    .add-task-form textarea,
+    .add-task-form select {
+        width: 100%;
+        padding: 12px 16px;
+        margin: 5px 0 5px 0;
+        border-radius: 12px;
+        border: 1px solid #3a3a5a;
+        background: #0f0f1a;
+        color: #e0e0e0;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s ease;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .add-task-form input:focus,
+    .add-task-form textarea:focus,
+    .add-task-form select:focus {
+        border-color: #6c3cb0;
+        box-shadow: 0 0 0 3px rgba(108, 60, 176, 0.2);
+    }
+
+    .add-task-form input::placeholder,
+    .add-task-form textarea::placeholder {
+        color: #6a6a80;
+    }
+
+    .add-task-form textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .add-task-form select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236a6a80' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+    }
+
+    .add-task-form select option {
+        background: #1a1a2e;
+        color: #e0e0e0;
+    }
+
+    .add-task-form .required {
+        color: #ff6b6b;
+        font-weight: 700;
+    }
+
+    .add-task-form button {
+        width: 100%;
+        background: linear-gradient(135deg, #6c3cb0 0%, #8a4fd4 100%);
+        color: #fff;
+        padding: 14px;
+        font-weight: 700;
+        font-size: 1rem;
+        border: none;
+        border-radius: 50px;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(108, 60, 176, 0.3);
+    }
+
+    .add-task-form button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 30px rgba(108, 60, 176, 0.5);
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 18px;
+        color: #a0a0b0;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #c084fc;
+        text-decoration: underline;
+    }
+
+    /* User Info (Top Right) */
+    .user-info {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #1a1a2e;
+        border: 1px solid #6c3cb0;
+        border-radius: 12px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        color: #e0e0e0;
+        box-shadow: 0 4px 20px rgba(108, 60, 176, 0.2);
+        z-index: 100;
+    }
+
+    .user-info span {
+        color: #c084fc;
+    }
+
+    .user-info button {
+        background: #6c3cb0;
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .user-info button:hover {
+        background: #8a4fd4;
+        transform: scale(1.05);
+    }
+
+    .user-info a {
+        text-decoration: none;
+    }
+
+    /* Hero Section */
+    .hero {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-bottom: 2px solid #6c3cb0;
+        text-align: center;
+        z-index: 99;
+    }
+
+    .hero h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #c084fc;
+        margin-bottom: 0.15rem;
+    }
+
+    .hero p {
+        color: #a0a0b0;
+        font-size: 0.9rem;
+    }
+
+    /* Form Container with top padding for fixed header */
+    .form-wrapper {
+        margin-top: 100px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .add-task-form {
+            padding: 25px 20px;
+        }
+
+        .user-info {
+            position: relative;
+            top: 0;
+            right: 0;
+            margin: 10px 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 {
+            font-size: 1.3rem;
+        }
+
+        .form-wrapper {
+            margin-top: 130px;
+            padding: 0 15px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<header class="hero">
+    <h1 id="greeting">👋 Привет</h1>
+    <p id="subtext">Пусть этот день будет продуктивным!</p>
+</header>
+
+<!-- User Info -->
+<div class="user-info">
+    {% if user %}
+    <span>👤 {{ user.username }}</span>
+    <a href="/logout"><button>Выйти</button></a>
+    {% else %}
+    <a href="/login" style="color: #c084fc; text-decoration: none;">Войти</a>
+    {% endif %}
+</div>
+
+<!-- Form Container -->
+<div class="form-wrapper">
+    <form class="add-task-form" method="post" action="/tasks">
+        <h2>➕ Новая задача</h2>
+
+        <label for="title">Название задачи <span class="required">*</span></label>
+        <input type="text" id="title" name="title" placeholder="Введите название задачи..." required>
+
+        <label for="description">Описание задачи <span style="color: #6a6a80;">(необязательно)</span></label>
+        <textarea id="description" name="description" placeholder="Добавьте детали к вашей задаче..." rows="3"></textarea>
+
+        <label for="deadline">Срок выполнения <span style="color: #6a6a80;">(необязательно)</span></label>
+        <input type="datetime-local" id="deadline" name="deadline">
+
+        <label for="category">Категория <span style="color: #6a6a80;">(необязательно)</span></label>
+        <select id="category" name="category">
+            <option value="">Выберите категорию</option>
+            <option value="personal">👤 Личное</option>
+            <option value="work">💼 Работа</option>
+            <option value="study">📚 Учеба</option>
+            <option value="health">💪 Здоровье</option>
+            <option value="other">📌 Другое</option>
+        </select>
+
+        <button type="submit">✨ Создать задачу</button>
+
+        <a href="/" class="back-link">← Вернуться к списку задач</a>
+    </form>
+</div>
+
+<script>
+    function getGreetingParts(date = new Date()) {
+        const h = date.getHours();
+        if (h >= 5 && h < 12) {
+            return { text: "Доброе утро", emoji: "🌅", sub: "Новый день — новые цели. Погнали!" };
+        }
+        if (h >= 12 && h < 16) {
+            return { text: "Добрый день", emoji: "☀️", sub: "Отличный темп, продолжаем в том же духе!" };
+        }
+        if (h >= 16 && h < 20) {
+            return { text: "Добрый вечер", emoji: "🌇", sub: "Почти у цели — завершите день продуктивно!" };
+        }
+        return { text: "Доброй ночи", emoji: "🌙", sub: "Время подвести итоги и отдохнуть." };
+    }
+
+    function updateGreeting() {
+        const { text, emoji, sub } = getGreetingParts();
+        document.getElementById("greeting").innerHTML = `${emoji} ${text}`;
+        document.getElementById("subtext").innerHTML = sub;
+    }
+    
+    updateGreeting();
+</script>
+
+</body>
+</html>

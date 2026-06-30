@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мои задачи</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #0a0a0f;
+        color: #e0e0e0;
+        min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero {
+        padding: 2rem 1.5rem;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-bottom: 2px solid #6c3cb0;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #c084fc;
+        margin-bottom: 0.25rem;
+    }
+
+    .hero p {
+        color: #a0a0b0;
+        font-size: 1rem;
+    }
+
+    /* User Info */
+    .user-info {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #1a1a2e;
+        border: 1px solid #6c3cb0;
+        border-radius: 12px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        color: #e0e0e0;
+        box-shadow: 0 4px 20px rgba(108, 60, 176, 0.2);
+        z-index: 100;
+    }
+
+    .user-info span {
+        color: #c084fc;
+    }
+
+    .user-info button {
+        background: #6c3cb0;
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .user-info button:hover {
+        background: #8a4fd4;
+        transform: scale(1.05);
+    }
+
+    .user-info a {
+        text-decoration: none;
+    }
+
+    /* Tasks Container */
+    .tasks-container {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Task Card */
+    .task-card {
+        padding: 18px 22px;
+        border-radius: 16px;
+        position: relative;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid transparent;
+    }
+
+    .task-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .task-card.purple {
+        background: linear-gradient(135deg, #2a1a4a 0%, #3c1c6a 100%);
+        border-color: #6c3cb0;
+        box-shadow: 0 4px 20px rgba(108, 60, 176, 0.15);
+    }
+
+    .task-card.purple:hover {
+        box-shadow: 0 6px 30px rgba(108, 60, 176, 0.3);
+    }
+
+    .task-card.yellow {
+        background: linear-gradient(135deg, #2a1a1a 0%, #4a2a1a 100%);
+        border-color: #b0803c;
+        box-shadow: 0 4px 20px rgba(176, 128, 60, 0.15);
+    }
+
+    .task-card.yellow:hover {
+        box-shadow: 0 6px 30px rgba(176, 128, 60, 0.3);
+    }
+
+    .task-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #f0f0f0;
+        margin-bottom: 4px;
+    }
+
+    .task-desc {
+        font-size: 0.9rem;
+        color: #b0b0c0;
+    }
+
+    /* Task Status Badge */
+    .task-status {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-top: 8px;
+        font-weight: 600;
+        background: rgba(255,255,255,0.1);
+        color: #a0a0b0;
+    }
+
+    .task-status.completed {
+        background: rgba(108, 60, 176, 0.3);
+        color: #c084fc;
+    }
+
+    .task-status.pending {
+        background: rgba(176, 128, 60, 0.3);
+        color: #e0b080;
+    }
+
+    /* Task Actions */
+    .task-actions {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: flex;
+        gap: 6px;
+    }
+
+    .task-actions form {
+        display: inline;
+    }
+
+    .task-actions button {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 5px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        color: #c0c0d0;
+    }
+
+    .task-actions button:hover {
+        background: rgba(255,255,255,0.2);
+        transform: scale(1.05);
+    }
+
+    .task-actions .delete-btn:hover {
+        background: rgba(220, 50, 50, 0.3);
+        border-color: rgba(220, 50, 50, 0.3);
+        color: #ff6b6b;
+    }
+
+    .task-actions .edit-btn:hover {
+        background: rgba(108, 60, 176, 0.3);
+        border-color: rgba(108, 60, 176, 0.3);
+        color: #c084fc;
+    }
+
+    /* Toggle Complete Form */
+    .toggle-form {
+        display: inline;
+    }
+
+    .toggle-form button {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 5px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        color: #c0c0d0;
+    }
+
+    .toggle-form button:hover {
+        background: rgba(108, 60, 176, 0.3);
+        border-color: rgba(108, 60, 176, 0.3);
+        transform: scale(1.05);
+    }
+
+    .toggle-form button.completed {
+        color: #c084fc;
+    }
+
+    /* Add Task Button */
+    .add-task-btn {
+        display: block;
+        max-width: 220px;
+        margin: 30px auto;
+        background: linear-gradient(135deg, #6c3cb0 0%, #8a4fd4 100%);
+        color: #fff;
+        text-align: center;
+        padding: 14px 24px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(108, 60, 176, 0.3);
+    }
+
+    .add-task-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 30px rgba(108, 60, 176, 0.5);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6a6a80;
+    }
+
+    .empty-state .emoji {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h2 {
+        color: #a0a0b0;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #6a6a80;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .user-info {
+            position: relative;
+            top: 0;
+            right: 0;
+            margin: 10px 20px;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 1.6rem;
+        }
+
+        .task-card {
+            padding: 14px 16px;
+        }
+
+        .task-actions {
+            position: static;
+            margin-top: 12px;
+            justify-content: flex-end;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- User Info -->
+<div class="user-info">
+    {% if user %}
+    <span>👤 {{ user.username }}</span>
+    <a href="/logout"><button>Выйти</button></a>
+    {% else %}
+    <a href="/login" style="color: #c084fc; text-decoration: none;">Войти</a>
+    {% endif %}
+</div>
+
+<!-- Hero Section -->
+<header class="hero">
+    <h1 id="greeting">👋 Привет</h1>
+    <p id="subtext">Пусть этот день будет продуктивным!</p>
+</header>
+
+<!-- Tasks Container -->
+<div class="tasks-container">
+    {% if tasks %}
+        {% for task in tasks %}
+        <div class="task-card {{ loop.index % 2 == 0 and 'purple' or 'yellow' }}">
+            <div class="task-title">
+                {% if task.completed %}✅ {% endif %}
+                {{ task.title }}
+            </div>
+            <div class="task-desc">{{ task.description if task.description else '' }}</div>
+            
+            <!-- Task Status -->
+            <span class="task-status {{ 'completed' if task.completed else 'pending' }}">
+                {{ '✅ Выполнено' if task.completed else '⏳ В процессе' }}
+            </span>
+
+            <!-- Task Actions -->
+            <div class="task-actions">
+                <!-- Toggle Complete -->
+                <form method="post" action="/tasks/{{ task.id }}/toggle" class="toggle-form">
+                    <button type="submit" class="{{ 'completed' if task.completed else '' }}">
+                        {{ '✓' if task.completed else '○' }}
+                    </button>
+                </form>
+
+                <!-- Edit -->
+                <button class="edit-btn" data-task-id="{{ task.id }}" onclick="editTask(this.dataset.taskId)">✏️</button>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="emoji">🎉</div>
+            <h2>Задач пока нет!</h2>
+            <p>Добавьте первую задачу, чтобы начать планирование.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Add Task Button -->
+<a href="/add-task" class="add-task-btn">Добавить задачу</a>
+
+<script>
+    function editTask(taskId) {
+        const newTitle = prompt("Введите новое название задачи:");
+        if (newTitle && newTitle.trim() !== "") {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/tasks/${taskId}/update`;
+            
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'title';
+            input.value = newTitle;
+            
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+
+</body>
+</html>
