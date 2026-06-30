@@ -1,0 +1,10 @@
+# Игнорируем локальную базу данных
+fastapi_todo_app/todo.db
+*.db
+
+# Игнорируем виртуальное окружение
+.venv/
+
+# Кэш Python
+fastapi_todo_app/__pycache__/
+__pycache__/
